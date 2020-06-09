@@ -1,0 +1,13 @@
+.idea
+.vaadin
+*.iml
+**/.iml
+target
+*.exe.stackdump
+*.log
+**/.log
+node/*
+.cache/*
+.cache
+/.idea/
+ImagesRes/
