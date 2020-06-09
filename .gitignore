@@ -11,3 +11,4 @@ node/*
 .cache
 /.idea/
 ImagesRes/
+node_modules/
