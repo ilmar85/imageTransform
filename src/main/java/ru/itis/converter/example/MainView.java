@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
+import static ru.itis.converter.example.Transformer.transformImage;
+
 
 /**
  * The main view contains a button and a click listener.
@@ -41,9 +43,8 @@ import java.util.Iterator;
 public class MainView extends VerticalLayout {
     final static String IN_PATH = "C:\\work\\imageconverter\\ImagesRes\\in";
     public final static String OUT_PATH = "C:\\work\\imageconverter\\ImagesRes\\out";
-
+    public final static String REVERSE_PATH = "C:\\work\\imageconverter\\ImagesRes\\reverse";
     protected  Image image = new Image();
-
     public MainView() {
         Div page = new Div();
         MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
@@ -64,13 +65,6 @@ public class MainView extends VerticalLayout {
         add(  imageButton, page, upload);
     }
 
-    private void transformImage(File forwardInputFile) {
-        ImageInOut imageInOut = new ImageOpenSave();
-        BufferedImage forwardImage = imageInOut.inputImage(forwardInputFile);
-        WaveletImage waveletForwardImage = new WaveletBufferedImage(forwardImage, TransformType.FORWARD, WaveletType.HAAR, 2);
-        File forwardOutputFile = new File(OUT_PATH+File.separator+forwardInputFile.getName());
-        imageInOut.outputImage(waveletForwardImage.getTransformedImage(), forwardOutputFile, "png");
-    }
 
     private Component createComponent(String mimeType, String fileName,
                                       InputStream stream) {

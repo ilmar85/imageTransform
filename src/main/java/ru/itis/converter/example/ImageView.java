@@ -3,8 +3,10 @@ package ru.itis.converter.example;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
@@ -12,7 +14,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import static ru.itis.converter.example.MainView.OUT_PATH;
+import static ru.itis.converter.example.MainView.REVERSE_PATH;
+import static ru.itis.converter.example.Transformer.reverseTransform;
 
 @Route(ImageView.ROUTE)
 public class ImageView extends VerticalLayout implements HasUrlParameter<String> {
@@ -36,9 +45,29 @@ public class ImageView extends VerticalLayout implements HasUrlParameter<String>
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
-        initImage(MainView.IN_PATH,before);
-        initImage(MainView.OUT_PATH, after);
-        add(before,new Label("До преобразования "),after,new Label("после преобразования"));
+        initImage(MainView.IN_PATH, before);
+        initImage(OUT_PATH, after);
+
+
+
+        Dialog dialog = new Dialog();
+        final Button close = new Button("Close");
+        close.addClickListener(event -> dialog.close());
+        final Image image = new Image();
+        final VerticalLayout verticalLayout = new VerticalLayout(image, close);
+        dialog.add(verticalLayout);
+        dialog.setWidth("90%");
+        dialog.setHeight("90%");
+
+        after.addClickListener(event -> {
+            Notification.show("Начинаем  реверс преобразование!");
+            reverseTransform( new File(String.format("%s%s%s", OUT_PATH, File.separator, fileName)));
+            Notification.show("готово");
+            Notification.show("Загружаем");
+            initImage(REVERSE_PATH,image);
+            dialog.open();
+        });
+        add(before, new Label("До преобразования "), after, new Label("после преобразования"));
     }
 
     @Override
@@ -56,4 +85,6 @@ public class ImageView extends VerticalLayout implements HasUrlParameter<String>
             e.printStackTrace();
         }
     }
+
+
 }

@@ -64,6 +64,7 @@
     </dependencyManagement>
 
     <dependencies>
+
         <dependency>
             <groupId>com.vaadin</groupId>
             <!-- Replace artifactId with vaadin-core to use only free components -->
@@ -187,4 +188,7 @@
             </build>
         </profile>
     </profiles>
+
+
+
 </project>
